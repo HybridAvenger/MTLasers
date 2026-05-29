@@ -26,6 +26,10 @@ repositories {
         dir file(extraAPIDir)
     }
 
+    flatDir {
+        dir 'E:/MC Mod Dev/Dependency/1.21.1/neoforge'
+    }
+
     maven { //Patchouli && JEI
         url 'https://maven.blamejared.com'
         content {
@@ -109,6 +113,8 @@ runs {
         //programArgument '--nogui'
     }
 
+
+
     // This run config launches GameTestServer and runs all registered gametests, then exits.
     // By default, the server will crash when no gametests are provided.
     // The gametest system is also enabled by default for other run configs under the /test command.
@@ -136,6 +142,9 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
+    implementation "com.hybridavenger.hybridlib:hybridlib:0.0.2-1.21.1-Neoforge"
+    runtimeOnly "com.hybridavenger.hybridlib:hybridlib:0.0.2-1.21.1-Neoforge"
+
 
     //AE2
     //compileOnly "appeng:appliedenergistics2-neoforge:${ae2_version}:api"

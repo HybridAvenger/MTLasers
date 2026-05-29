@@ -17,7 +17,7 @@ description='''
 '''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.laserio]] #optional
+[[dependencies.mtlasers]] #optional
     modId="neoforge" #mandatory
     type="required" #mandatory
     versionRange="${neo_version_range}" #mandatory
@@ -31,9 +31,16 @@ description='''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
-[[dependencies.laserio]] #optional
+[[dependencies.mtlasers]] #optional
     modId="mekanism" #mandatory
     type="optional" #mandatory
 versionRange = "[10.7,)"
     ordering="AFTER"
     side="BOTH"
+
+[[dependencies.mtlasers]] #optional
+modId="hybridlib" #mandatory
+type="required" #mandatory
+versionRange = "[0.0.2-1.21.1-Neoforge,)"
+ordering="AFTER"
+side="BOTH"

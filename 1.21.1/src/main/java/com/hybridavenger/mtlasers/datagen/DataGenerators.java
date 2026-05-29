@@ -22,7 +22,7 @@ public class DataGenerators {
         PackOutput packOutput = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
-        generator.addProvider(event.includeServer(), new LaserIORecipes(packOutput, event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new MtLasersRecipes(packOutput, event.getLookupProvider()));
         generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
                 List.of(new LootTableProvider.SubProviderEntry(LaserIOLootTable::new, LootContextParamSets.BLOCK)), event.getLookupProvider()));
         LaserIOBlockTags blockTags = new LaserIOBlockTags(packOutput, lookupProvider, event.getExistingFileHelper());
@@ -30,7 +30,7 @@ public class DataGenerators {
         LaserIOItemTags itemTags = new LaserIOItemTags(packOutput, lookupProvider, blockTags, event.getExistingFileHelper());
         generator.addProvider(event.includeServer(), itemTags);
 
-        generator.addProvider(event.includeClient(), new LaserIOBlockStates(packOutput, event.getExistingFileHelper()));
+        generator.addProvider(event.includeClient(), new MtLasersBlockStates(packOutput, event.getExistingFileHelper()));
         generator.addProvider(event.includeClient(), new LaserIOItemModels(packOutput, event.getExistingFileHelper()));
         generator.addProvider(event.includeClient(), new LaserIOLanguageProvider(packOutput, "en_us"));
 

@@ -6,8 +6,8 @@ import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 
-public class LaserIOBlockStates extends BlockStateProvider {
-    public LaserIOBlockStates(PackOutput output, ExistingFileHelper helper) {
+public class MtLasersBlockStates extends BlockStateProvider {
+    public MtLasersBlockStates(PackOutput output, ExistingFileHelper helper) {
         super(output, MtLasers.MODID, helper);
     }
 

@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 
 
-public class LaserIORecipes extends RecipeProvider {
+public class MtLasersRecipes extends RecipeProvider {
 
-    public LaserIORecipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public MtLasersRecipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(packOutput, lookupProvider);
     }
 
