@@ -1,0 +1,82 @@
+package com.hybridavenger.mtlasers.client.events;
+
+import com.hybridavenger.mtlasers.client.renderer.BlockOverlayRender;
+import com.hybridavenger.mtlasers.client.renderer.DelayedRenderer;
+import com.hybridavenger.mtlasers.common.blockentities.LaserConnectorAdvBE;
+import com.hybridavenger.mtlasers.common.blockentities.basebe.BaseLaserBE;
+import com.hybridavenger.mtlasers.common.blocks.LaserConnectorAdv;
+import com.hybridavenger.mtlasers.common.items.LaserWrench;
+import com.hybridavenger.mtlasers.util.VectorHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+
+import static com.hybridavenger.mtlasers.client.events.RenderGUIOverlay.renderLocation;
+
+public class ClientEvents {
+    @SubscribeEvent
+    static void renderWorldLastEvent(RenderLevelStageEvent evt) {
+        if (evt.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
+            return;
+        }
+
+        Player myplayer = Minecraft.getInstance().player;
+
+        ItemStack myItem = getWrench(myplayer);
+        if (myItem.getItem() instanceof LaserWrench) {
+            GlobalPos selectedDimPos = LaserWrench.getConnectionPos(myItem, myplayer.level());
+            if (selectedDimPos != null && myplayer.level().dimension().equals(selectedDimPos.dimension())) {
+                BlockEntity be = myplayer.level().getBlockEntity(selectedDimPos.pos());
+                if (!selectedDimPos.pos().equals(BlockPos.ZERO) && (be instanceof BaseLaserBE))
+                    BlockOverlayRender.renderSelectedBlock(evt, selectedDimPos.pos(), (BaseLaserBE) be);
+            }
+        }
+
+        //DelayedRenderer Renders
+        DelayedRenderer.render(evt.getPoseStack());
+        DelayedRenderer.renderConnections(evt.getPoseStack());
+    }
+
+    public static ItemStack getWrench(Player player) {
+        ItemStack heldItem = player.getMainHandItem();
+        if (!(heldItem.getItem() instanceof LaserWrench)) {
+            heldItem = player.getOffhandItem();
+            if (!(heldItem.getItem() instanceof LaserWrench)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        return heldItem;
+    }
+
+    @SubscribeEvent
+    static void renderGUIOverlay(CustomizeGuiOverlayEvent.DebugText evt) {
+        Player player = Minecraft.getInstance().player;
+        Level level = player.level();
+        ItemStack wrench = getWrench(player);
+        if (!(wrench.getItem() instanceof LaserWrench)) {
+            return;
+        }
+        int range = 10; // How far away you can look at blocks from
+        BlockHitResult lookingAt = VectorHelper.getLookingAt(player, ClipContext.Fluid.NONE, range);
+        if (lookingAt == null || !((level.getBlockState(VectorHelper.getLookingAt(player, wrench, range).getBlockPos()).getBlock() instanceof LaserConnectorAdv))) {
+            return;
+        }
+        BlockEntity blockEntity = level.getBlockEntity(lookingAt.getBlockPos());
+        if (blockEntity instanceof LaserConnectorAdvBE laserConnectorAdvBE) {
+            GuiGraphics guiGraphics = evt.getGuiGraphics();
+            Font font = Minecraft.getInstance().font;
+            renderLocation(font, guiGraphics, laserConnectorAdvBE);
+        }
+    }
+}
