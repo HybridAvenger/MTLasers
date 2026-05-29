@@ -1,2 +1,4 @@
-# LaserIO
-Can't have DireWire without Wires!
+# MassTech Lasers
+A Personal Version of LaserIO
+
+Will always stay MIT
